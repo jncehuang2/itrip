@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.itrip.dao.hotel.HotelMapper">
+    <select id="getItripHotel" resultType="itripHotel">
+        select * from itrip_hotel where id = #{id}
+    </select>
+    <select id="getDetailsHotel" resultType="cn.itrip.beans.vo.hotel.ItripSearchDetailsHotelVO">
+        select name,description from itrip_hotel_feature,itrip_label_dic where hotelId = #{id} and featureId = itrip_label_dic.id;
+    </select>
+    <select id="getItripHotelImg" resultType="itripImage">
+        select * from itrip_image where type = 0 and targetId = #{targetId}
+    </select>
+    <select id="getItriptradeArea" resultType="itripHotel">
+        select * from itrip_hotel where cityId = #{cityId}
+    </select>
+    <select id="getItripPersonalOrderRoom" resultType="cn.itrip.beans.vo.order.ItripPersonalOrderRoomVO">
+        select address,bookingDays,checkInDate,checkOutDate,count,room.hotelId,hotelLevel,hotel.hotelName,hotelorder.id,isHavingBreakfast,linkUserName,payAmount,roomBedTypeName,roomId,room.payType,roomTitle,specialRequirement roomPayType
+        from itrip_hotel hotel,itrip_hotel_order hotelorder,
+        (select itrip_hotel_room.*,name roomBedTypeName from itrip_hotel_room,itrip_label_dic
+        where roomBedTypeId = itrip_label_dic.id) room
+        where hotel.id = hotelorder.hotelId and room.id = hotelorder.roomId and hotelorder.id = #{orderId};
+    </select>
+</mapper>
